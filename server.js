@@ -8,6 +8,8 @@ const http = require('http')
 // Lectura del puerto a utilizar desde la variable de entorno, sino utiliza el puerto por default 8080
 // Uso del recurso File System
 const fs = require('fs')
+// Uso del modulo Path
+const path = require('path')
 const port = process.env.PORT || 8080
 // Server creado, agregado callback
 const server = http.createServer()
@@ -21,8 +23,14 @@ server.listen(port)
 
 // Refactorizando codigo
 function onRequest(req, res){
-    let file = fs.readFileSync('public/index.html')
-    res.end(file)
+    // path join permite concatenar rutas y directorios
+    let fileName = path.join(__dirname, 'public', 'index.html')
+    fs.readFile(fileName,function(err, file){
+        if(err){
+            return res.end(err.message)
+        }
+        res.end(file)
+    })
 }
 function onListening(){
     console.log("Servidor escuchando en el puerto: "+port)
