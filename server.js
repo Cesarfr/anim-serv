@@ -39,5 +39,6 @@ function onRequest(req, res) {
     })
 }
 function onListening() {
-    console.log("Servidor escuchando en el puerto: "+port)
+    // Uso de template strings (ES6)
+    console.log(`Servidor escuchando en el puerto: ${port}`)
 }
