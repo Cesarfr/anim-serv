@@ -22,16 +22,22 @@ server.on('listening', onListening)
 server.listen(port)
 
 // Refactorizando codigo
-function onRequest(req, res){
+function onRequest(req, res) {
     // path join permite concatenar rutas y directorios
     let fileName = path.join(__dirname, 'public', 'index.html')
-    fs.readFile(fileName,function(err, file){
-        if(err){
-            return res.end(err.message)
-        }
-        res.end(file)
+    
+    // Especifica el tipo de cabecera a utilizar
+    res.setHeader('Content-Type', 'text/html')
+    
+    // creacion de Read Stream
+    let rs = fs.createReadStream(fileName)
+    rs.pipe(res)
+    
+    // Controlar errores
+    rs.on('error', function (err) {
+        res.end(err, message)
     })
 }
-function onListening(){
+function onListening() {
     console.log("Servidor escuchando en el puerto: "+port)
 }
