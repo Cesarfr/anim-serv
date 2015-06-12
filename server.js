@@ -6,6 +6,8 @@
  */
 const http = require('http')
 // Lectura del puerto a utilizar desde la variable de entorno, sino utiliza el puerto por default 8080
+// Uso del recurso File System
+const fs = require('fs')
 const port = process.env.PORT || 8080
 // Server creado, agregado callback
 const server = http.createServer()
@@ -19,7 +21,8 @@ server.listen(port)
 
 // Refactorizando codigo
 function onRequest(req, res){
-    res.end("Hola io.js")
+    let file = fs.readFileSync('public/index.html')
+    res.end(file)
 }
 function onListening(){
     console.log("Servidor escuchando en el puerto: "+port)
