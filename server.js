@@ -8,9 +8,14 @@ const http = require('http')
 // Lectura del puerto a utilizar desde la variable de entorno, sino utiliza el puerto por default 8080
 const port = process.env.PORT || 8080
 // Server creado, agregado callback
-const server = http.createServer(onRequest)
+const server = http.createServer()
+
+// Event emitters
+server.on('request', onRequest)
+server.on('listening', onListening)
+
 // Puerto que utilizara el servidor
-server.listen(port, onListening)
+server.listen(port)
 
 // Refactorizando codigo
 function onRequest(req, res){
