@@ -3,7 +3,10 @@ const path = require('path')
 const course = require('course')
 // Llamamos a la libreria st
 const st = require('st')
+//Lamamos a la libreria body para procesar la informacion
+const jsonBody = require('body/json')
 
+//Instanciamos el router con 'course'
 const router = course()
 
 // Configuracion de st
@@ -12,6 +15,17 @@ const mount = st({
     path: path.join(__dirname, '..', 'public'),
     index: 'index.html',
     passthrough: true
+})
+
+// Generando la ruta para recibir los datos
+router.post('/process', function(req, res){
+    jsonBody(req, res, { limit: 3*1024*1024 }, function(err, body){
+        if (err) return fail(err, res)
+        
+        console.log(body);
+        res.setHeader('Content-Type', 'application/json')
+        res.end(JSON.stringify({ok: true}))
+    })
 })
 
 function onRequest(req, res){
