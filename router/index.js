@@ -1,20 +1,36 @@
+const path = require('path')
+// Agregar 'course' para el manejo de rutas dinamicas
+const course = require('course')
 // Llamamos a la libreria st
 const st = require('st')
-const path = require('path')
+
+const router = course()
 
 // Configuracion de st
+// passthrough: la ejecucion continua si no hay archivo estatico
 const mount = st({
     path: path.join(__dirname, '..', 'public'),
-    index: 'index.html'
+    index: 'index.html',
+    passthrough: true
 })
 
 function onRequest(req, res){
-    mount(req, res, function (){
-        if (err) return res.end(err.message)
+    mount(req, res, function (err){
+        if (err) return fail(err, res)
         
-        res.statusCode = 404
-        res.end(`Not Found ${req.url}`)
+        router(req, res, function(err) {
+            if (err) return fail(err, res)
+            
+            res.statusCode = 404
+            res.end(`404 Not Found ${req.url}`)
+        })
     })
+}
+
+function fail(err, res) {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end(err.message);
 }
 
 // Exportamos a server.js para cargar este modulo

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Cesarfr/anim-serv",
   "dependencies": {
+    "course": "0.0.1",
     "st": "^0.5.4",
     "webrtc2images": "^1.4.4"
   },
